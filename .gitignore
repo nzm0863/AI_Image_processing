@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+runs/
+
+images/
+fail_images/
+dataset/
+input/
+output/
+annotations/
+processed/
