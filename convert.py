@@ -10,7 +10,7 @@ CLASS_NAMES = {
     "target": 0
 }
 
-images_dir = Path("images")
+images_dir = Path("fail_images")
 dataset_dir = Path("dataset")
 
 train_images = dataset_dir / "images" / "train"

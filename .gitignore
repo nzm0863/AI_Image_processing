@@ -3,7 +3,7 @@ venv/
 __pycache__/
 *.pyc
 runs/
-
+*.pt
 images/
 fail_images/
 dataset/
@@ -11,3 +11,4 @@ input/
 output/
 annotations/
 processed/
+models/

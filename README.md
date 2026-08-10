@@ -1,6 +1,6 @@
 # AI Image Processing
 
-YOLO11 Segmentation を利用して画像内の指定オブジェクトのみを切り抜くツール。
+YOLO11 Segmentation を利用して画像内の指定オブジェクトへ自動でモザイク（ぼかし）を適用するツール。
 
 ## 使用技術
 
