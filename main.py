@@ -16,7 +16,8 @@ def process_images(
     input_dir,
     output_dir,
     blur_size,
-    confidence
+    confidence,
+    progress_callback=None
 ):
     extensions = ["*.png", "*.jpg", "*.jpeg", "*.webp"]
     # input_dir = Path("input")
@@ -27,11 +28,10 @@ def process_images(
 
     count = 0
     saved = 0
-
     no_detection = 0
 
-
-    for image_path in image_files:
+    total = len(image_files)
+    for current, image_path in enumerate(image_files, start=1):
         count += 1
 
         print(f"{image_path.name} ... 処理中")
@@ -49,6 +49,9 @@ def process_images(
         print(f"{image_path.name} 完了")
         
         # move_image(image_path)
+                
+        if progress_callback:
+            progress_callback(current, total)
         
         
         print(f"[{count}] {image_path.name}")

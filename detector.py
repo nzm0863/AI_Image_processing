@@ -24,6 +24,7 @@ def detect(image,model,blur_size,confidence):
     for i, polygon in enumerate(masks.xy):
         polygon = polygon.astype("int32")
         cv2.fillPoly(mask, [polygon], (255,255,255))
+            
     # for i, polygon in enumerate(masks.xy):
     #     print(type(polygon))
     #     print(polygon)
@@ -34,4 +35,7 @@ def detect(image,model,blur_size,confidence):
 
     # 白い部分だけ置き換える
     image[mask == 255] = blur[mask == 255]
+    
+    
+    
     return image, True

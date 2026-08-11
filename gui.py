@@ -1,12 +1,13 @@
 import customtkinter as ctk
 from tkinter import filedialog
 from pathlib import Path
+import threading
 
 from main import process_images
 
 app = ctk.CTk()
 app.title("AI Auto Mosaic")
-app.geometry("900x500")
+app.geometry("900x700")
 app.minsize(700, 350)
 
 ctk.set_appearance_mode("System")
@@ -33,14 +34,47 @@ def select_output_folder():
 
 
 def start_process():
-    input_dir = Path(input_entry.get())
-    output_dir = Path(output_entry.get())
-    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    input_path = input_entry.get().strip()
+    output_path = output_entry.get().strip()
+
+    if not input_path:
+        print("入力フォルダを指定してください")
+        return
+    
+    input_dir = Path(input_path)
+    output_dir = Path(output_path)
+    if not input_dir.is_dir():
+        print("入力先がフォルダではありません")
+        return
+
+    if not output_path:
+        print("出力フォルダを指定してください")
+        return
+      
+    # output_dir.mkdir(parents=True, exist_ok=True)
+    progress_frame.grid()
+    start_button.grid_remove()
     blur_size = int(blur_slider.get()) * 2 + 1
     confidence = confidence_slider.get()
-    if not input_dir.exists():
-        print("入力フォルダが存在しません")
-        return
+      
+    start_button.configure(
+        state="disabled",
+        text="Processing..."
+    )
+    
+    thread = threading.Thread(
+        target=run_process,
+        args=(
+            input_dir,
+            output_dir,
+            blur_size,
+            confidence
+        ),
+        daemon=True
+    )
+
+    thread.start()
 
     process_images(
         input_dir,
@@ -48,12 +82,8 @@ def start_process():
         blur_size,
         confidence)
 
-start_button = ctk.CTkButton(
-    app,
-    text="Start",
-    command=start_process,
-    
-)
+
+
 
 
 # input
@@ -234,15 +264,91 @@ confidence_value_label.grid(
     sticky="w"
 )
 
-# start
+# start,progress
+start_button = ctk.CTkButton(
+    app,
+    text="Start",
+    command=start_process,
+)
 start_button.grid(
     row=10,
     column=0,
     columnspan=2,
     padx=10,
-    pady=10,
+    pady=20,
     sticky="ew"
 )
+progress_frame = ctk.CTkFrame(app)
+
+progress_bar = ctk.CTkProgressBar(progress_frame)
+progress_bar.pack(fill="x", padx=10, pady=(10, 5))
+
+progress_label = ctk.CTkLabel(
+    progress_frame,
+    text="0 / 0"
+)
+progress_label.pack(pady=(0, 10))
+progress_frame.grid(
+    row=10,
+    column=0,
+    columnspan=2,
+    padx=10,
+    pady=20,
+    sticky="ew"
+)
+progress_frame.grid_remove()
+
+def update_progress(current, total):
+    app.after(
+        0,
+        lambda: update_progress_ui(current, total)
+    )
+    
+def update_progress_ui(current, total):
+    progress_bar.set(current / total)
+
+    percent = int(current / total * 100)
+
+    progress_label.configure(
+        text=f"{current} / {total}  ({percent}%)"
+    )
+    
+def process_finished():
+    progress_bar.set(1)
+
+    progress_label.configure(
+        text="Finished!"
+    )
+
+    start_button.configure(
+        state="normal",
+        text="Start"
+    )
+    app.after(1500, reset_progress)
+    
+def reset_progress():
+    progress_frame.grid_remove()
+    start_button.grid()
+    progress_bar.set(0)
+    progress_label.configure(text="0 / 0")
+    
+def run_process(
+    input_dir,
+    output_dir,
+    blur_size,
+    confidence
+):
+  
+    process_images(
+        input_dir,
+        output_dir,
+        blur_size,
+        confidence,
+        progress_callback=update_progress
+    )
+
+    app.after(0, process_finished)
+    
 input_frame.grid_columnconfigure(0, weight=1)
 output_frame.grid_columnconfigure(0, weight=1)
 blur_frame.grid_columnconfigure(0, weight=1)
