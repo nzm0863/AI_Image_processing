@@ -329,7 +329,10 @@ def reset_progress():
     
     
 # log
-log_text = ctk.CTkTextbox(app)
+log_text = ctk.CTkTextbox(
+    app,
+    state="disabled"
+)
 log_text.grid(
     row=11,
     column=0,
@@ -346,8 +349,10 @@ def update_log(message):
     )
 
 def add_log(message):
+    log_text.configure(state="normal")
     log_text.insert("end", message + "\n")
     log_text.see("end")
+    log_text.configure(state="disabled")
     
 def run_process(
     input_dir,
