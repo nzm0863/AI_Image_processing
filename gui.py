@@ -39,17 +39,17 @@ def start_process():
     output_path = output_entry.get().strip()
 
     if not input_path:
-        print("入力フォルダを指定してください")
+        update_log("入力フォルダを指定してください")
         return
     
     input_dir = Path(input_path)
     output_dir = Path(output_path)
     if not input_dir.is_dir():
-        print("入力先がフォルダではありません")
+        update_log("入力先がフォルダではありません")
         return
 
     if not output_path:
-        print("出力フォルダを指定してください")
+        update_log("出力フォルダを指定してください")
         return
       
     # output_dir.mkdir(parents=True, exist_ok=True)
@@ -76,11 +76,6 @@ def start_process():
 
     thread.start()
 
-    process_images(
-        input_dir,
-        output_dir,
-        blur_size,
-        confidence)
 
 
 
@@ -332,6 +327,28 @@ def reset_progress():
     progress_bar.set(0)
     progress_label.configure(text="0 / 0")
     
+    
+# log
+log_text = ctk.CTkTextbox(app)
+log_text.grid(
+    row=11,
+    column=0,
+    columnspan=2,
+    padx=10,
+    pady=10,
+    sticky="nsew"
+)
+
+def update_log(message):
+    app.after(
+        0,
+        lambda: add_log(message)
+    )
+
+def add_log(message):
+    log_text.insert("end", message + "\n")
+    log_text.see("end")
+    
 def run_process(
     input_dir,
     output_dir,
@@ -344,7 +361,8 @@ def run_process(
         output_dir,
         blur_size,
         confidence,
-        progress_callback=update_progress
+        progress_callback=update_progress,
+        log_callback=update_log
     )
 
     app.after(0, process_finished)

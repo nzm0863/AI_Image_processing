@@ -12,3 +12,5 @@ output/
 annotations/
 processed/
 models/
+dist/
+build/

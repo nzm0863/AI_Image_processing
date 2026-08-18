@@ -1,10 +1,10 @@
 from ultralytics import YOLO
-from pathlib import Path
-from shutil import move
+# from pathlib import Path
+# from shutil import move
 import cv2
 
-processed_dir = Path("processed")
-processed_dir.mkdir(exist_ok=True)
+# processed_dir = Path("processed")
+# processed_dir.mkdir(exist_ok=True)
 
 
 def detect(image,model,blur_size,confidence):
