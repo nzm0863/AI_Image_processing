@@ -1,21 +1,12 @@
-from ultralytics import YOLO
 from pathlib import Path
 from shutil import move
 from get_image import get_image_files
-from detector import detect
+from detector.private_parts import detect as private_parts_detect
+from detector.face import detect as face_detect
+from blur import blur
 # from move_image import move_image
 from save_image import save_image
 import cv2
-
-# model = YOLO("yolo11n-seg.pt")
-# MODEL_PATH = "runs/segment/train-9/weights/best.pt"
-# MODEL_PATH = "models/best.pt"
-# model = YOLO(MODEL_PATH)
-
-BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = BASE_DIR / "models" / "best.pt"
-
-model = YOLO(str(MODEL_PATH))
 
 def process_images(
     input_dir,
@@ -32,6 +23,11 @@ def process_images(
             print(message)
             
     extensions = ["*.png", "*.jpg", "*.jpeg", "*.webp"]
+    parts=["private_parts","face"]
+    detectors = {
+        "private_parts": private_parts_detect,
+        "face": face_detect,
+    }
     # input_dir = Path("input")
     image_files = get_image_files(input_dir, extensions)
 
@@ -43,15 +39,36 @@ def process_images(
     no_detection = 0
 
     total = len(image_files)
+    
+    
     for current, image_path in enumerate(image_files, start=1):
+        combined_mask = None
+        image_detected = False
         count += 1
 
         log(f"{image_path.name} ... 処理中")
         
         image = cv2.imread(str(image_path))
-        image, detected = detect(image, model,blur_size,confidence)
+        
+        
+        for part in parts:
+            detector = detectors[part]
 
-        if not detected:
+            mask, detected = detector(image, confidence)
+
+            if detected:  
+                image_detected = True
+
+                if combined_mask is None:
+                    combined_mask = mask
+                else:
+                    combined_mask = cv2.bitwise_or(combined_mask, mask)
+                
+        # 最後に1回だけぼかす
+        if combined_mask is not None:
+            image = blur(image, combined_mask, blur_size)
+            
+        if not image_detected:
             no_detection += 1
             log(f"{image_path.name}: 検出なし")
 
