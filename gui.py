@@ -80,14 +80,15 @@ def start_process():
 
 
 
-
+main_row=0
 # input
 input_label = ctk.CTkLabel(app, text="Input Folder")
-input_label.grid(row=0, column=0, sticky="w", padx=10, pady=(20, 5))
+input_label.grid(row=main_row, column=0, sticky="w", padx=10, pady=(20, 5))
 
+main_row+=1
 input_frame = ctk.CTkFrame(app)
 input_frame.grid(
-    row=1,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -95,9 +96,10 @@ input_frame.grid(
     sticky="ew"
 )
 
+
 input_entry = ctk.CTkEntry(input_frame)
 input_entry.grid(
-    row=0,
+    row =0,
     column=0,
     padx=10,
     pady=5,
@@ -110,31 +112,33 @@ input_button = ctk.CTkButton(
     command=select_input_folder
 )
 input_button.grid(
-    row=0,
+    row =0,
     column=1,
     padx=10
 )
 
+
 # output
+main_row +=2
 output_label = ctk.CTkLabel(app, text="Output Folder")
 output_label.grid(
-    row=2,
+    row =main_row,
     column=0,
     padx=10,
     pady=(20, 5),
     sticky="w"
 )
 
+main_row +=1
 output_frame = ctk.CTkFrame(app)
 output_frame.grid(
-    row=3,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
     pady=5,
     sticky="ew"
 )
-
 
 output_entry = ctk.CTkEntry(output_frame)
 output_entry.grid(
@@ -151,15 +155,72 @@ output_button = ctk.CTkButton(
 )
 output_button.grid(row=0, column=1, padx=10)
 
-# blur
+# parts
+main_row += 2
 
+target_label = ctk.CTkLabel(app, text="Detection Target")
+target_label.grid(
+    row=main_row,
+    column=0,
+    padx=10,
+    pady=(20, 5),
+    sticky="w"
+)
+
+main_row += 1
+
+target_frame = ctk.CTkFrame(app)
+target_frame.grid(
+    row=main_row,
+    column=0,
+    columnspan=2,
+    padx=10,
+    pady=5,
+    sticky="ew"
+)
+
+# チェック状態（初期値はON）
+face_var = ctk.BooleanVar(value=True)
+private_var = ctk.BooleanVar(value=True)
+
+face_checkbox = ctk.CTkCheckBox(
+    target_frame,
+    text="Face",
+    variable=face_var
+)
+face_checkbox.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+
+private_checkbox = ctk.CTkCheckBox(
+    target_frame,
+    text="Private Parts",
+    variable=private_var
+)
+private_checkbox.grid(row=0, column=1, padx=10, pady=10, sticky="w")
+
+
+
+# blur
 def update_blur(value):
     blur_size = int(value) * 2 + 1
     blur_value_label.configure(text=f"Blur Size : {blur_size}")
 
+main_row+=2
+blur_value_label = ctk.CTkLabel(
+    app,
+    text="Blur Size : 31"
+)
+blur_value_label.grid(
+    row =main_row,
+    column=0,
+    padx=10,
+    pady=(20, 5),
+    sticky="w"
+)
+
+main_row+=2
 blur_frame = ctk.CTkFrame(app)
 blur_frame.grid(
-    row=5,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -188,32 +249,32 @@ blur_slider.grid(
     pady=5,
     sticky="ew"
 )
-
-
-blur_value_label = ctk.CTkLabel(
-    app,
-    text="Blur Size : 31"
-)
 blur_slider.set(15)
 update_blur(15)
-blur_value_label.grid(
-    row=4,
-    column=0,
-    padx=10,
-    pady=(20, 5),
-    sticky="w"
-)
 
 # confidence
 def update_confidence(value):
     confidence_value_label.configure(
         text=f"Confidence : {value:.2f}"
     )
-
     
+main_row+=2
+confidence_value_label = ctk.CTkLabel(
+    app,
+    text="Confidence : 0.50"
+)
+confidence_value_label.grid(
+    row =main_row,
+    column=0,
+    padx=10,
+    pady=(20, 5),
+    sticky="w"
+)
+
+main_row+=2
 confidence_frame = ctk.CTkFrame(app)
 confidence_frame.grid(
-    row=7,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -235,8 +296,10 @@ confidence_slider = ctk.CTkSlider(
     command=update_confidence
 )
 
+
+main_row+=2
 confidence_slider.grid(
-    row=1,
+    row=main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -244,29 +307,20 @@ confidence_slider.grid(
     sticky="ew"
 )
 
-
-confidence_value_label = ctk.CTkLabel(
-    app,
-    text="Confidence : 0.50"
-)
 confidence_slider.set(0.50)
 update_confidence(0.50)
-confidence_value_label.grid(
-    row=6,
-    column=0,
-    padx=10,
-    pady=(20, 5),
-    sticky="w"
-)
+
+
 
 # start,progress
+main_row+=2
 start_button = ctk.CTkButton(
     app,
     text="Start",
     command=start_process,
 )
 start_button.grid(
-    row=10,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -284,7 +338,7 @@ progress_label = ctk.CTkLabel(
 )
 progress_label.pack(pady=(0, 10))
 progress_frame.grid(
-    row=10,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -329,12 +383,13 @@ def reset_progress():
     
     
 # log
+main_row+=2
 log_text = ctk.CTkTextbox(
     app,
     state="disabled"
 )
 log_text.grid(
-    row=11,
+    row =main_row,
     column=0,
     columnspan=2,
     padx=10,
@@ -354,20 +409,37 @@ def add_log(message):
     log_text.see("end")
     log_text.configure(state="disabled")
     
+
+    
 def run_process(
     input_dir,
     output_dir,
     blur_size,
     confidence
 ):
-  
+    parts = []
+
+    targets = {
+        "face": face_var,
+        "private_parts": private_var,
+    }
+
+    for name, var in targets.items():
+        if var.get():
+            parts.append(name)
+
+    if not parts:
+        update_log("検出対象を1つ以上選択してください")
+        return
+    
     process_images(
         input_dir,
         output_dir,
         blur_size,
         confidence,
+        parts,
         progress_callback=update_progress,
-        log_callback=update_log
+        log_callback=update_log,
     )
 
     app.after(0, process_finished)

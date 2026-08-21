@@ -3,7 +3,7 @@ from shutil import move
 from get_image import get_image_files
 from detector.private_parts import detect as private_parts_detect
 from detector.face import detect as face_detect
-from blur import blur
+from blur.blur import blur
 # from move_image import move_image
 from save_image import save_image
 import cv2
@@ -13,8 +13,10 @@ def process_images(
     output_dir,
     blur_size,
     confidence,
+    parts,
     progress_callback=None,
-    log_callback=None
+    log_callback=None,
+    
 ):
     def log(message):
         if log_callback:
@@ -23,7 +25,6 @@ def process_images(
             print(message)
             
     extensions = ["*.png", "*.jpg", "*.jpeg", "*.webp"]
-    parts=["private_parts","face"]
     detectors = {
         "private_parts": private_parts_detect,
         "face": face_detect,
@@ -52,11 +53,15 @@ def process_images(
         
         
         for part in parts:
-            detector = detectors[part]
+            detector = detectors.get(part)
+
+            if detector is None:
+                log(f"未対応の検出対象: {part}")
+                continue
 
             mask, detected = detector(image, confidence)
 
-            if detected:  
+            if detected:
                 image_detected = True
 
                 if combined_mask is None:
