@@ -1,4 +1,5 @@
 # AI Auto Blur
+**Latest Release:** v0.8 Face Beta
 
 YOLO11 Segmentationを利用して、画像内の指定オブジェクトを自動検出し、
 ぼかし処理を行うWindows向けGUIツールです。
