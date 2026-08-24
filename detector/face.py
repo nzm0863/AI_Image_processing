@@ -1,14 +1,13 @@
 from pathlib import Path
+from utils.resource import get_temp_model
 import numpy as np
 import cv2
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "models" / "face_detection_yunet_2026may.onnx"
-
+MODEL_PATH = get_temp_model("models/face_detection_yunet_2026may.onnx")
 detector = cv2.FaceDetectorYN.create(
     str(MODEL_PATH),
     "",
-    (320, 320),  # 初期値。後で画像サイズに合わせる。
+    (320, 320),
 )
 
 def detect(image, confidence):

@@ -1,10 +1,10 @@
 from ultralytics import YOLO
+from utils.resource import resource_path
 from pathlib import Path
 import numpy as np
 import cv2
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_PATH = BASE_DIR / "models" / "best.pt"
+MODEL_PATH = resource_path("models/best.pt")
 
 model = YOLO(str(MODEL_PATH))
 
