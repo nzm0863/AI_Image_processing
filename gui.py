@@ -7,7 +7,7 @@ from main import process_images
 
 app = ctk.CTk()
 app.title("AI Auto Mosaic")
-app.geometry("900x700")
+app.geometry("900x900")
 app.minsize(700, 350)
 
 ctk.set_appearance_mode("System")
