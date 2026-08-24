@@ -5,7 +5,7 @@ a = Analysis(
     ['gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('models/best.pt', 'models')],
+    datas=[('models/best.pt', 'models'), ('models/face_detection_yunet_2026may.onnx', 'models')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

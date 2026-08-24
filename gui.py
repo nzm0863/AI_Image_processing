@@ -185,14 +185,14 @@ private_var = ctk.BooleanVar(value=True)
 
 face_checkbox = ctk.CTkCheckBox(
     target_frame,
-    text="Face",
+    text="Face (Photo)",
     variable=face_var
 )
 face_checkbox.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
 private_checkbox = ctk.CTkCheckBox(
     target_frame,
-    text="Private Parts",
+    text="Private Parts (Illustration)",
     variable=private_var
 )
 private_checkbox.grid(row=0, column=1, padx=10, pady=10, sticky="w")
