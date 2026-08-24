@@ -1,6 +1,6 @@
 # AI Auto Blur
 
-**Latest Release:** v0.8.1
+**Latest Release:** v0.8.2
 
 YOLO11 Segmentation と YuNet を利用して、画像内の指定オブジェクトを自動検出し、ぼかし処理を行う Windows 向け GUI ツールです。
 
@@ -96,6 +96,19 @@ pyinstaller --clean --noconfirm --onedir --windowed \
 生成されたアプリは `dist/AI Auto Blur/` に出力されます。
 
 ## Changelog
+
+## v0.8.2
+
+### Fixed
+
+* 日本語パス（OneDrive / デスクトップ / ドキュメント等）で顔検出モデルが読み込めない問題を修正。
+* EXE を別フォルダへ移動した際に顔ぼかしが動作しない問題を修正。
+
+### Refactoring
+
+* `utils/resource.py` を追加。
+* モデルファイルの読み込み処理を共通化（PyInstaller対応）。
+
 
 ### v0.8.1
 
