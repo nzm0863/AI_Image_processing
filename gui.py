@@ -41,6 +41,10 @@ def start_process():
     if not input_path:
         update_log("入力フォルダを指定してください")
         return
+      
+    if not output_path:
+            update_log("出力フォルダを指定してください")
+            return
     
     input_dir = Path(input_path)
     output_dir = Path(output_path)
@@ -48,8 +52,9 @@ def start_process():
         update_log("入力先がフォルダではありません")
         return
 
-    if not output_path:
-        update_log("出力フォルダを指定してください")
+    # 入力と出力が同じフォルダかチェック
+    if input_dir.resolve() == output_dir.resolve():
+        update_log("入力フォルダと出力フォルダは別の場所を指定してください")
         return
       
     # output_dir.mkdir(parents=True, exist_ok=True)
