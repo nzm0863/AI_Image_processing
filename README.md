@@ -3,6 +3,11 @@
 **Latest Release:** v0.8.2
 
 YOLO11 Segmentation と YuNet を利用して、画像内の指定オブジェクトを自動検出し、ぼかし処理を行う Windows 向け GUI ツールです。
+![gui](gui.png)
+
+## youtube
+
+https://www.youtube.com/shorts/hnytZAQRL1k
 
 ## Features
 
